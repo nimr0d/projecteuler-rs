@@ -20,7 +20,7 @@ pub fn int_sqrt(mut n : u64) -> u32 {
 	return res as u32;
 }
 
-/// Triange number
+/// Triangle number
 pub fn tri(n : u64) -> u64{
 	return ((n + 1) * n) / 2;
 }
