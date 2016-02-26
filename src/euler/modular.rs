@@ -1,3 +1,4 @@
+use super::{ PRIMES_100 };
 
 /// Modular multiplication.
 /// Used for safe multiplication without overflow.
@@ -65,6 +66,37 @@ pub fn modinv(n : u64, modulus : u64) -> u64 {
 		t ^= 1;
 	}
 	return (t as u64) * modulus + a[t];
+}
+
+/// Tonelli-Shanks.
+pub fn modroot(n : u64, p : u64) -> u64 {
+	let mut q : u64 = (p - 1) / 2;
+	let mut s : u64 = 1;
+	while q & 1 == 0 {
+		q >>= 1;
+		s += 1;
+	}
+	let z : u64 = 2;
+	for z in PRIMES_100.iter() {
+		if legendre(*z, p) == -1 {
+			break;
+		}
+	}
+	let (mut c, mut r, mut t, mut m) = (modpow(z, q, p), modpow(n, (q + 1) / 2, p), modpow(n, q, p), s);
+	while t != 1 {
+		let mut tm = (t * t) % p;
+		let mut i : u64 = 1;
+		while tm != 1 {
+			tm = (tm * tm) % p;
+			i += 1;
+		}
+		let b = modpow(c, (1u64 << (m - i - 1)), p);
+		r = (r * b) % p;
+		c = (b * b) % p;
+		t = (t * c) % p;
+		m = i;
+	}
+	return r;
 }
 
 /// Legendre symbol.
