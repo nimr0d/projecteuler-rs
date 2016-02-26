@@ -2,6 +2,7 @@
 extern crate euler;
 
 fn main() {
-	println!("p2");
-	euler::prime_sieve(10);
+	for i in 0 .. 20 {
+		println!("{}", euler::fib(i));
+	}
 }
